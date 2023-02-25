@@ -1,0 +1,166 @@
+[[execs]]
+filename = "road_brute_force.cpp"
+overwrite = { prob_id = "road" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "TLE" },
+  # skip subtask 2, 3, 4 
+]
+
+[[execs]]
+filename = "road_two_spanning_forest.cpp"
+overwrite = { prob_id = "road" }
+tests = [
+  { testcase = "all", expect = "AC" }
+]
+
+[[execs]]
+filename = "road_bcc_modify_record.cpp"
+overwrite = { prob_id = "road" }
+tests = [
+  { testcase = "all", expect = "AC" }
+]
+
+[[execs]]
+filename = "road_all_modify_record.cpp"
+overwrite = { prob_id = "road" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "AC" },
+  { testcase = "4", expect = "TLE" }
+]
+
+[[execs]]
+filename = "road_all_modify_record_linearsearch.cpp"
+overwrite = { prob_id = "road" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "TLE" },
+  { testcase = "4", expect = "TLE" }
+]
+
+[[execs]]
+filename = "road_binsearch_bcc.cpp"
+overwrite = { prob_id = "road" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" }
+  # skip subtask 3, 4 
+]
+
+[[execs]]
+filename = "road_subtask1.cpp"
+overwrite = { prob_id = "road" }
+tests = [
+  { testcase = "1", expect = "AC" }
+  # skip subtask 0, 2, 3, 4 
+]
+
+[[execs]]
+filename = "road_bcc_modify_record_linearsearch.cpp"
+overwrite = { prob_id = "road" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "TLE" },
+  { testcase = "4", expect = "TLE" }
+]
+
+[[execs]]
+filename = "road_disjoint_set.cpp"
+overwrite = { prob_id = "road" }
+tests = [
+  { testcase = "all", expect = "AC" }
+]
+
+[[execs]]
+filename = "house.cpp"
+overwrite = { prob_id = "house" }
+tests = [
+  { testcase = "all", expect = "AC" }
+]
+
+[[execs]]
+filename = "house_loop_order.cpp"
+overwrite = { prob_id = "house" }
+tests = [
+  { testcase = "all", expect = "AC" }
+]
+
+[[execs]]
+filename = "house_double.cpp"
+overwrite = { prob_id = "house" }
+tests = [
+  { testcase = "1", expect = "WA" },
+  { testcase = "2", expect = "WA" },
+  { testcase = "3", expect = "WA" }
+  # skip subtask 0
+]
+
+[[execs]]
+filename = "storm.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "all", expect = "AC" }
+]
+
+[[execs]]
+filename = "storm_lognlogC.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "all", expect = "AC" }
+]
+
+[[execs]]
+filename = "storm_edgecase.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "1", expect = "WA" },
+  { testcase = "2", expect = "WA" },
+  { testcase = "3", expect = "WA" },
+  { testcase = "4", expect = "WA" },
+  { testcase = "6", expect = "WA" }
+  # skip subtask 0, 5
+]
+
+[[execs]]
+filename = "storm_n2logn.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "TLE" },
+  { testcase = "3", expect = "TLE" }
+  # skip subtask 0, 4, 5, 6
+]
+
+[[execs]]
+filename = "storm_n2.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "AC" }
+  # skip subtask 0, 4, 5, 6
+]
+
+[[execs]]
+filename = "game.cpp"
+overwrite = { prob_id = "game" }
+tests = [
+  { testcase = "all", expect = "AC" }
+]
+
+[[execs]]
+filename = "game_missing_path_tangent_to_cycle.cpp"
+overwrite = { prob_id = "game" }
+tests = [
+  { testcase = "1", expect = "WA" },
+  { testcase = "3", expect = "WA" }
+  # skip subtask 0, 2
+]

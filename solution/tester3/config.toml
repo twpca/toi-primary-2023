@@ -1,0 +1,204 @@
+[[execs]]
+filename = "game_2bfs.cpp"
+overwrite = { prob_id = "game" }
+tests = [
+  { testcase = "1", expect = "WA" },
+  { testcase = "2", expect = "WA" },
+  { testcase = "3", expect = "AC" },
+  { testcase = "4", expect = "WA" },
+  # skip subtask 0
+]
+
+[[execs]]
+filename = "game_3bfs_dijkstra.cpp"
+overwrite = { prob_id = "game" }
+tests = [
+  { testcase = "1", expect = "WA" },
+  { testcase = "2", expect = "WA" },
+  { testcase = "3", expect = "WA" },
+  { testcase = "4", expect = "WA" },
+  # skip subtask 0
+]
+
+[[execs]]
+filename = "game_floyd.cpp"
+overwrite = { prob_id = "game" }
+tests = [
+  { testcase = "1", expect = "WA" },
+  # skip subtask 0, 2, 3, 4
+]
+
+[[execs]]
+filename = "game_greedy_tree.cpp"
+overwrite = { prob_id = "game" }
+tests = [
+  { testcase = "1", expect = "WA" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "WA" },
+  { testcase = "4", expect = "WA" },
+  # skip subtask 0
+]
+
+[[execs]]
+filename = "game_jellyfishdp.cpp"
+overwrite = { prob_id = "game" }
+tests = [
+  { testcase = "all", expect = "AC" },
+]
+
+[[execs]]
+filename = "game_treedp.cpp"
+overwrite = { prob_id = "game" }
+tests = [
+  { testcase = "1", expect = "WA" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "WA" },
+  { testcase = "4", expect = "WA" },
+  # skip subtask 0
+]
+
+[[execs]]
+filename = "house.cpp"
+overwrite = { prob_id = "house" }
+tests = [
+  { testcase = "all", expect = "AC" },
+]
+
+[[execs]]
+filename = "molecule_brute.cpp"
+overwrite = { prob_id = "molecule" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  # skip subtask 2, 3, 4
+]
+
+[[execs]]
+filename = "molecule_construct.cpp"
+overwrite = { prob_id = "molecule" }
+tests = [
+  { testcase = "all", expect = "AC" },
+]
+
+[[execs]]
+filename = "molecule_dp.cpp"
+overwrite = { prob_id = "molecule" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" },
+  # skip subtask 3, 4
+]
+
+[[execs]]
+filename = "molecule_partial.cpp"
+overwrite = { prob_id = "molecule" }
+tests = [
+  { testcase = "1", expect = "PC" },
+  { testcase = "2", expect = "PC" },
+  { testcase = "3", expect = "PC" },
+  { testcase = "4", expect = "PC" },
+  # skip subtask 0
+]
+
+[[execs]]
+filename = "molecule_s3.cpp"
+overwrite = { prob_id = "molecule" }
+tests = [
+  { testcase = "0", expect = "WA" },
+  { testcase = "1", expect = "WA" },
+  { testcase = "2", expect = "WA" },
+  { testcase = "3", expect = "AC" },
+  { testcase = "4", expect = "WA" },
+]
+
+[[execs]]
+filename = "molecule_verification.cpp"
+overwrite = { prob_id = "problem_unexist" }
+tests = []
+
+[[execs]]
+filename = "road_flow.cpp"
+overwrite = { prob_id = "road" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" }, # ??
+  { testcase = "2", expect = "AC" }, # ??
+  { testcase = "3", expect = "TLE" },
+  # skip subtask 4
+]
+
+[[execs]]
+filename = "storm_counting.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "5", expect = "AC" },
+  # skip subtask 1, 2, 3, 4, 6
+]
+
+[[execs]]
+filename = "storm_klogn_nlogn.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "AC" }, # ??
+  { testcase = "4", expect = "AC" },
+  { testcase = "5", expect = "TLE" },
+  { testcase = "6", expect = "TLE" },
+]
+
+[[execs]]
+filename = "storm_n2_heap.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "TLE" },
+  { testcase = "4", expect = "TLE" },
+  # skip subtask 5, 6
+]
+
+[[execs]]
+filename = "storm_n2_kth_element.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "AC" },
+  { testcase = "4", expect = "TLE" },
+  # skip subtask 5, 6
+]
+
+[[execs]]
+filename = "storm_n2logk.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" }, # ??
+  { testcase = "3", expect = "TLE" },
+  { testcase = "4", expect = "TLE" },
+  # skip subtask 5, 6
+]
+
+[[execs]]
+filename = "storm_n2logn.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "TLE" },
+  # skip subtask 3, 4, 5, 6
+]
+
+[[execs]]
+filename = "storm_nlogw.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "all", expect = "AC" },
+]

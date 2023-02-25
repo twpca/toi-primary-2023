@@ -1,0 +1,29 @@
+[[execs]]
+filename = "house.cc"
+overwrite = { prob_id = "house" }
+tests = [
+  { testcase = "all", expect = "AC" },
+]
+
+[[execs]]
+filename = "house_small_inf.cc"
+overwrite = { prob_id = "house" }
+tests = [
+  { testcase = "1", expect = "WA" },
+  { testcase = "2", expect = "WA" },
+  { testcase = "3", expect = "WA" },
+]
+
+[[execs]]
+filename = "storm.cc"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "all", expect = "AC" },
+]
+
+[[execs]]
+filename = "game.cc"
+overwrite = { prob_id = "game" }
+tests = [
+  { testcase = "all", expect = "AC" },
+]

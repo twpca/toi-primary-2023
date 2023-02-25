@@ -1,0 +1,33 @@
+[[execs]]
+filename = "house_nlgn_nm.cpp"
+overwrite = { prob_id = "house" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "AC" },
+]
+
+[[execs]]
+filename = "storm_nlgn_klgn.cpp"
+overwrite = { prob_id = "storm" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "AC" },
+  { testcase = "4", expect = "AC" },
+  { testcase = "5", expect = "TLE" },
+  { testcase = "6", expect = "TLE" },
+]
+
+[[execs]]
+filename = "molecule_brain.cpp"
+overwrite = { prob_id = "molecule" }
+tests = [
+  { testcase = "0", expect = "AC" },
+  { testcase = "1", expect = "AC" },
+  { testcase = "2", expect = "AC" },
+  { testcase = "3", expect = "AC" },
+  { testcase = "4", expect = "AC" },
+]

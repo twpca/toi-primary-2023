@@ -1,0 +1,895 @@
+\section{房屋推薦 (house)}
+
+\subsection{問題描述}
+
+房屋仲介小潮負責高談市的租房業務。 小潮手上有編號為 \(1, 2, \cdots, n\)
+的 \(n\) 間待租的房屋， 房屋 \(i\) 的位置可以用二維座標 \((a_i, b_i)\)
+表示，並且此房屋的月租金為 \(r_i\) 元。
+
+高談市有 \(m\) 座捷運站， 捷運站的編號為 \(1, 2, \cdots, m\)， 捷運站
+\(j\) 的位置在二維平面以座標 \((c_j, d_j)\) 表示。 定義房屋 \(i\)
+與捷運站 \(j\) 的距離為 \(\sqrt{(a_i - c_j)^2 + (b_i - d_j)^2}\) 單位。
+
+小潮發現租客的喜好如下：
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  房屋與最近的捷運站的距離越短越好。
+\item
+  如果兩間房屋和彼此最近的捷運站距離一樣近，月租金越小的房屋越好。
+\item
+  如果兩間房屋和彼此最近的捷運站距離一樣近，而且月租金相同，房屋編號越小的越好。
+\end{enumerate}
+
+請幫忙小潮開發一個房屋推薦系統，對房屋們進行排序，使得越是得到租客喜愛的房屋排在越前面。
+
+如下圖為一 \(n=3\) 且 \(m=3\) 的例子， 其中正方形的點 \(H_1, H_2, H_3\)
+分別代表房屋 \(1, 2, 3\)， 圓點 \(S_1, S_2, S_3\) 則分別代表捷運站
+\(1, 2, 3\) 的位置。並且：
+
+\begin{itemize}
+\tightlist
+\item
+  第 \(1\) 間房屋位在 \((2, 0)\)，月租金為 \(11000\) 元。
+\item
+  第 \(2\) 間房屋位在 \((5, 0)\)，月租金為 \(12000\) 元。
+\item
+  第 \(3\) 間房屋位在 \((3, 3)\)，月租金為 \(10000\) 元。
+\item
+  第 \(1\) 座捷運站位在 \((1, 3)\)。
+\item
+  第 \(2\) 座捷運站位在 \((3, 0)\)。
+\item
+  第 \(3\) 座捷運站位在 \((5, 3)\)。
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=0.8]
+  \draw[help lines, color=gray!30, dashed] (0, 0) grid (6, 6);
+  \draw[->,ultra thick] (0,0)--(6,0) node[right]{$x$};
+  \draw[->,ultra thick] (0,0)--(0,6) node[above]{$y$};
+
+  \filldraw[red] ([xshift=-2pt,yshift=-2pt]2, 0) rectangle ++(4pt,4pt) node[anchor=north east]{\small$H_1$};
+  \filldraw[red] ([xshift=-2pt,yshift=-2pt]5, 0) rectangle ++(4pt,4pt) node[anchor=north west]{\small$H_2$};
+  \filldraw[red] ([xshift=-2pt,yshift=-2pt]3, 3) rectangle ++(4pt,4pt) node[anchor=north west]{\small$H_3$};
+
+  \filldraw[black] (1, 3) circle (2.5pt) node[anchor=north west]{\small $S_1$};
+  \filldraw[black] (3, 0) circle (2.5pt) node[anchor=north west]{\small $S_2$};
+  \filldraw[black] (5, 3) circle (2.5pt) node[anchor=north west]{\small $S_3$};
+\end{tikzpicture}
+\end{figure}
+
+\newpage
+
+可以算出：
+
+\begin{itemize}
+\tightlist
+\item
+  和第 \(1\) 間房屋距離最短的捷運站為第 \(2\) 座捷運站，距離為 \(1\)
+  單位。
+\item
+  和第 \(2\) 間房屋距離最短的捷運站為第 \(2\) 座捷運站，距離為 \(2\)
+  單位。
+\item
+  和第 \(3\) 間房屋距離最短的捷運站為第 \(1\) 座捷運站與第 \(3\)
+  座捷運站，距離為 \(2\) 單位。
+\end{itemize}
+
+第 \(2\) 間房屋和第 \(3\) 間房屋和捷運站的距離都是 \(2\) 單位，
+但是因為第 \(3\) 間房屋的月租金較為便宜，所以排在第 \(2\) 間房屋前面。
+因此租客喜好的房屋順序為：\(1, 3, 2\)。
+
+\subsection{輸入格式}
+
+\begin{format}
+\f{
+$n$ $m$
+$a_1$ $b_1$ $r_1$
+$a_2$ $b_2$ $r_2$
+$\vdots$
+$a_n$ $b_n$ $r_n$
+$c_1$ $d_1$
+$c_2$ $d_2$
+$\vdots$
+$c_m$ $d_m$
+}
+\end{format}
+
+\begin{itemize}
+\tightlist
+\item
+  \(n\), \(m\) 分別代表房屋與捷運站的數量。
+\item
+  房屋 \(i\) 的座標在 \((a_i, b_i)\)，且租金為 \(r_i\)。
+\item
+  捷運站 \(j\) 的座標為 \((c_j, d_j)\)。
+\end{itemize}
+
+\subsection{輸出格式}
+
+\begin{format}
+\f{
+$p_1$
+$p_2$
+$\vdots$
+$p_n$
+}
+\end{format}
+
+\begin{itemize}
+\tightlist
+\item
+  \(p_i\) 為一整數，代表排名第 \(i\) 名的房屋編號。
+\end{itemize}
+
+\subsection{測資限制}
+
+\begin{itemize}
+\tightlist
+\item
+  \(1 \le n \le 10^5\)。
+\item
+  \(1 \le m \le 10^3\)。
+\item
+  \(-10^9 \le a_i, b_i, c_i, d_i \le 10^9\)。
+\item
+  \(0 \le r_i \le 10^9\)
+\item
+  上述變數皆為整數。
+\item
+  任意一個座標最多只有一間房屋或一座捷運站，且不會有房屋和捷運站在同一座標。
+\end{itemize}
+
+\subsection{範例測試}
+
+\begin{example}
+\exmp{
+3 3
+2 0 11000
+5 0 12000
+3 3 10000
+1 3
+3 0
+5 3
+}{%
+1
+3
+2
+}%
+\exmp{
+4 2
+2 -2 10000
+-2 1 12000
+1 -3 12000
+4 5 19000
+1 5
+4 1
+}{%
+4
+1
+2
+3
+}%
+\end{example}
+
+\subsection{評分說明}
+
+本題共有三組子任務，條件限制如下所示。
+每一組可有一或多筆測試資料，該組所有測試資料皆需答對才會獲得該組分數。
+
+\begin{longtable}[]{@{}ccl@{}}
+\toprule
+子任務 & 分數 & 額外輸入限制 \\
+\midrule
+\endhead
+1 & \(20\) & \(n \le 2\) \\
+2 & \(30\) & \(n \le 100\) \\
+3 & \(50\) & 無額外限制 \\
+\bottomrule
+\end{longtable}
+
+\section{裁員風暴 (storm)}
+
+\subsection{問題描述}
+
+孫執行長任職於美味蛋糕股份有限公司，
+因為今年財報不如預期股東寄了公開信呼應公司能刪減成本，
+孫執行長決定要讓公司一些夥伴走自己的路。
+
+孫執行長列出 \(n\) 個公司目標， 並請員工們各自從 \(n\) 個公司目標挑
+\(1\) 個或 \(2\) 個他們認為最重要的目標，
+做出相同選擇的員工會被分類到同一個\textbf{小組}。
+已知每種可能的目標組合都至少有一位員工選擇， 可以計算出恰選擇 \(1\)
+個目標的小組有 \(n\) 組，恰選擇 \(2\) 個目標的小組有
+\(\frac{n(n-1)}{2}\) 組， 合計共有
+\(n + \frac{n(n-1)}{2} = \frac{n(n+1)}{2}\) 個小組。
+
+透過 AI 大數據分析，每個公司目標都被 AI 賦予一個權重，這裡用 \(w_i\)
+來表示第 \(i\) 的公司目標的權重。 並且我們可以用一個 \(01\)-序列 \(y\)
+序列：\(y_1, y_2, \cdots, y_n\) 來表示一個小組所選擇的目標， 有選擇第
+\(i\) 個公司目標則 \(y_i = 1\)，否則 \(y_i = 0\)。 AI
+定義\textbf{裁指數}為：
+
+\[\left( \dfrac{\displaystyle \sum_{i=1}^{n}w_i\times y_i}{\displaystyle \sum_{j=1}^{n} y_j} \right)\]
+
+孫執行長決定把所有小組的裁指數排名，如果一個人所屬於\textbf{裁指數前
+\(k\) 大的小組}就予以開除。
+
+想請你幫忙孫執行長找出排序後第 \(k\) 大的裁指數。
+
+例如：\(n=3\) 而 \(k=4\)， \(w_1=5, w_2=-2, w_3=3\)， 會有
+\(\dfrac{3(3+1)}{2} = 6\) 個小組， 每個小組的裁指數如下表 :
+
+\begin{longtable}[]{@{}cccl@{}}
+\toprule
+\(y_1\) & \(y_2\) & \(y_3\) & 裁指數 \\
+\midrule
+\endhead
+\(0\) & \(0\) & \(1\) & \((0+0+3)/(0+0+1) = 3\) \\
+\(0\) & \(1\) & \(0\) & \((0-2+0)/(0+1+0) = -2\) \\
+\(0\) & \(1\) & \(1\) & \((0-2+3)/(0+1+1) = \frac{1}{2}\) \\
+\(1\) & \(0\) & \(0\) & \((5+0+0)/(1+0+0) = 5\) \\
+\(1\) & \(0\) & \(1\) & \((5+0+3)/(1+0+1) = 4\) \\
+\(1\) & \(1\) & \(0\) & \((5-2+0)/(1+1+0) = \frac{3}{2}\) \\
+\bottomrule
+\end{longtable}
+
+裁指數排序後為 \(-2, \frac{1}{2}, \frac{3}{2}, 3, 4, 5\)， 並且第 \(4\)
+大為 \(\frac{3}{2}\)。 （備註：如果裁指數排名第 \(k\) 大和第 \(k+1\)
+大的裁指數相等， 那孫執行長會另外想方法決定裁員名單，不需替他擔心）
+
+\subsection{輸入格式}
+
+\begin{format}
+\f{
+$n$ $k$
+$w_1$ $w_2$ $\cdots$ $w_n$
+}
+\end{format}
+
+\begin{itemize}
+\tightlist
+\item
+  \(n\) 代表公司目標數量。
+\item
+  \(k\) 代表孫執行長的想知道的排名。
+\item
+  \(w_i\) 代表第 \(i\) 個公司目標的權重。
+\end{itemize}
+
+\subsection{輸出格式}
+
+\begin{format}
+\f{
+$p$
+$q$
+}
+\end{format}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\dfrac{p}{q}\) 代表排序後第 \(k\) 大的裁指數。
+\item
+  \(p\) 必須為整數。
+\item
+  \(q\) 必須為正整數。
+\item
+  \(|p|\) 跟 \(q\) 必須互質。
+\end{itemize}
+
+\subsection{測資限制}
+
+\begin{itemize}
+\tightlist
+\item
+  \(1 \le n \le 2\times 10^5\)。
+\item
+  \(1 \le k \le \dfrac{n(n+1)}{2}\)。
+\item
+  \(-{10}^9 \le w_i \le {10}^9\)。
+\item
+  \(n, k, w_i\) 都是整數。
+\end{itemize}
+
+\subsection{範例測試}
+
+\begin{example}
+\exmp{
+3 4
+5 -2 3
+}{%
+3
+2
+}%
+\exmp{
+3 3
+5 -2 3
+}{%
+3
+1
+}%
+\exmp{
+9 45
+5 -1 2 -3 6 -9 7 3 2
+}{%
+-9
+1
+}%
+\end{example}
+
+\subsection{評分說明}
+
+本題共有六組子任務，條件限制如下所示。
+每一組可有一或多筆測試資料，該組所有測試資料皆需答對才會獲得該組分數。
+
+\begin{longtable}[]{@{}ccl@{}}
+\toprule
+子任務 & 分數 & 額外輸入限制 \\
+\midrule
+\endhead
+1 & \(5\) & \(n \le 20\) \\
+2 & \(5\) & \(n \le 10^4\) 且 \(k \le 2\times 10^5\) \\
+3 & \(5\) & \(n \le 10^4\) \\
+4 & \(40\) & \(k \le 2\times 10^5\) \\
+5 & \(14\) & \(-100 \le w_i \le 100\) \\
+6 & \(31\) & 無額外限制 \\
+\bottomrule
+\end{longtable}
+
+\section{關卡地圖 (game)}
+
+\subsection{問題描述}
+
+許多遊戲的設計是以關卡為單位，玩家通過一個關卡後才能挑戰下一個關卡。
+這些關卡的解鎖關係有時並不是線性的，也就是玩家通過一個關卡後可能一次開放多個可以挑戰的新關卡，也可能不會開放任何新關卡。
+
+經典的Ａ遊戲就屬於這種非線性的關卡結構。
+關卡的狀態分為三種：「尚未解鎖」、「已解鎖但未通過」以及「已通過」。
+Ａ遊戲有 \(n\) 個關卡，被呈現在一張地圖上，其中有 \(m\)
+對關卡存在相互解鎖關係，以 \((u_i, v_i)\) 表示。 當玩家通過關卡 \(u_i\)
+時，關卡 \(v_i\) 將被解鎖；反過來說，當玩家通過關卡 \(v_i\) 時，關卡
+\(u_i\) 也會被解鎖。
+玩家可以從任意關卡開始遊戲，且保證在非線性的玩法下，可以通過其他所有關卡。
+另，為了避免破關流程過於簡單，Ａ遊戲滿足 \(m \le n\)。
+
+凱特決定把Ａ遊戲當作線性解鎖關卡來玩：選擇一個起始關卡，接著一旦通過了某個關卡
+\(c\) 後，下一關\textbf{只能是與關卡 \(c\)
+有相互解鎖關係的關卡}，且\textbf{一關最多只能通過一次}。
+已知凱特通過關卡 \(i\) 時，得到的成就感為
+\(a_i\)，請幫他找出最適合的破關路徑以最大化成就感總和。
+
+舉例來說，假設Ａ遊戲的關卡地圖如下圖所示，
+圖中圓點中的數字代表關卡編號，圓點旁邊的數字代表該關卡破關所得到的成就感；
+兩個關卡的連線代表一個相互解鎖關係。 若凱特選擇從關卡 \(7\)
+開始破關，則關卡 \(5\) 將被解鎖，接著依序通過關卡
+\(5, 1, 3, 6, 2\)，得到的成就感總和為 \(4+(-3)+(-1)+3+0+2 = 5\)。
+另一方面，若凱特選擇從關卡 \(8\) 開始破關，並依序通過關卡
+\(6, 3, 1, 2\)，得到的成就感總合為
+\(2+0+3+(-1)+2 = 6\)，此時成就感總和為最大值。
+
+\begin{figure}[h]
+   \centering
+   \begin{tikzpicture}
+      \def \Nodes {
+         1/-1/6/3,
+         2/2/3/3,
+         3/3/6/6,
+         4/-10/9/3,
+         5/-3/6/0,
+         6/0/3/6,
+         7/4/9/0,
+         8/2/0/6}
+      \def \Edges {
+         6/8,
+         3/6,
+         2/6,
+         1/3,
+         1/2,
+         1/4,
+         1/5,
+         5/7}
+      \foreach \id / \ai / \x / \y in \Nodes {
+         \node[draw,circle] (\id) at (\x, \y) {\id};
+         \node[text width=1cm] at (\x+1, \y+0.7) {\scriptsize \color{blue}{$\ai$}};
+      }
+      \foreach \u / \v in \Edges {
+         \draw (\u) -- (\v);
+      }
+   \end{tikzpicture}
+\end{figure}
+
+\subsection{輸入格式}
+
+\begin{format}
+\f{
+$n$ $m$
+$u_1$ $v_1$
+$u_2$ $v_2$
+$\vdots$
+$u_m$ $v_m$
+$a_1$ $a_2$ $\ldots$ $a_n$
+}
+\end{format}
+
+\begin{itemize}
+\tightlist
+\item
+  \(n\) 代表關卡數。
+\item
+  \(m\) 代表解鎖關係數。
+\item
+  \(u_i, v_i\) 代表通過關卡 \(u_i\) 或 \(v_i\)
+  的其中一個後，另一個關卡將被解鎖。
+\item
+  \(a_i\) 代表凱特通過關卡 \(i\) 時的成就感。
+\end{itemize}
+
+\subsection{輸出格式}
+
+\begin{format}
+\f{
+$s$
+}
+\end{format}
+
+\begin{itemize}
+\tightlist
+\item
+  \(s\) 為一整數，代表凱特能獲得的最大成就感總和。
+\end{itemize}
+
+\subsection{測資限制}
+
+\begin{itemize}
+\tightlist
+\item
+  \(1 \le n \le 10^5\)。
+\item
+  \(m = n-1\) 或 \(m = n\)。
+\item
+  \(1 \le u_i < v_i \le n\)，且若 \(i \ne j\)，保證
+  \((u_i, v_i) \ne (u_j, v_j)\)。
+\item
+  \(-10^9 \le a_i \le 10^9\)。
+\item
+  遊戲設計保證正常遊玩（非線性）時從任何一關做為起始關卡皆能解鎖所有關卡。
+\item
+  上述變數都是整數。
+\end{itemize}
+
+\subsection{範例測試}
+
+\begin{example}
+\exmp{
+8 8
+6 8
+3 6
+2 6
+1 3
+1 2
+1 4
+1 5
+5 7
+-1 2 3 -10 -3 0 4 2
+}{%
+6
+}%
+\exmp{
+2 1
+1 2
+-1 -10
+}{%
+-1
+}%
+\end{example}
+
+\subsection{評分說明}
+
+本題共有四組子任務，條件限制如下所示。
+每一組可有一或多筆測試資料，該組所有測試資料皆需答對才會獲得該組分數。
+
+\begin{longtable}[]{@{}ccl@{}}
+\toprule
+子任務 & 分數 & 額外輸入限制 \\
+\midrule
+\endhead
+1 & \(17\) & \(n \le 100\) \\
+2 & \(23\) & \(m = n-1\) \\
+3 & \(34\) & \(a_i \ge 0\) \\
+4 & \(26\) & 無額外限制 \\
+\bottomrule
+\end{longtable}
+
+\section{分子環 (molecule)}
+
+\textcolor{red}{\textbf{本題有 Special Judge，會依照解的好壞程度動態給分。}}
+
+\subsection{問題描述}
+
+A博士是學界研究外星球物質的最高權威， 他因為發現外星球中的 \texttt{X} 與
+\texttt{Y}
+兩種地球不存在的分子以及其形成的特殊化合物結構而被提名諾貝爾獎。
+在博士研究中，這兩種分子不論是與自己或另一種分子間都可以形成化學鍵，
+並且更進一步地發現，任意大於等於 \(3\) 個 \texttt{X} 與 \texttt{Y}
+分子都可以以任意順序形成一個環狀的化合物；
+環狀化合物中每一個分子與其前一個（逆時針方向）和後一個（順時針方向）分子分別形成鍵結，並廣泛分布在外星球上。
+A博士將這種環狀的化合物結構命名為\textbf{分子環}，
+為了方便表示這種分子環，A博士決定以任意一個分子做為起點順時針依序寫下各個分子形成的字串作為此分子環的表示。
+例如 \texttt{XYY} 與 \texttt{YYX} 與 \texttt{YXY}
+都是指同一種分子環的構造。
+
+A博士也發現了當分子環形成時，這個分子環的不穩定程度與\textbf{最多連續相同分子}的數量為正比，
+因此他決定稱這個數字為\textbf{分子環的不穩定度}。 舉例來說分子環
+\texttt{YXY} 中因為最多有 \(2\) 個連續的
+\texttt{Y}（第一和第三個分子在環狀中相鄰），不穩定度為 \(2\)； 同理，
+\texttt{XXYXXYXX} 分子環中因為可以找到 \(4\) 個連續的
+\texttt{X}（分子環表示中第 \(1, 2, 7, 8\) 個分子），因此不穩定度為
+\(4\)。
+
+在研究完分子環的性質後，A博士希望能合成出多種不同的分子環來證明他的理論。
+具體來說，他希望合成的分子環滿足下列的性質：
+
+\begin{itemize}
+\tightlist
+\item
+  有 \(a\) 個分子前後都是 \texttt{X} 分子
+\item
+  有 \(b\) 個分子前後都是 \texttt{Y} 分子
+\item
+  以及有 \(c\) 個分子前後分別是一個 \texttt{X} 分子和一個 \texttt{Y}
+  分子，前後順序可以顛倒
+\end{itemize}
+
+為了讓博士繼續進行他的研究，A博士決定請你幫忙寫個程式計算滿足條件的分子環。
+並且他希望你的程式能輸出\textbf{不穩定度較低的分子環}來降低合成的難度。
+由於分子環的表示有很多種，也不一定只有一種分子環滿足博士要求，
+你只需要輸出任意一種滿足條件的分子環結構即可。
+
+此題的得分會由你輸出的分子環不穩定度決定，請見《評分說明》一節。
+
+\subsection{輸入格式}
+
+\begin{format}
+\f{
+$a$ $b$ $c$
+}
+\end{format}
+
+\begin{itemize}
+\tightlist
+\item
+  \(a\) 代表分子環中有多少個分子前後都是 \texttt{X} 分子
+\item
+  \(b\) 代表分子環中有多少個分子前後都是 \texttt{Y} 分子
+\item
+  \(c\) 代表分子環中有多少個分子前後有一個 \texttt{X} 及一個 \texttt{Y}
+  分子（可以前後順序顛倒）
+\end{itemize}
+
+\subsection{輸出格式}
+
+若找得到分子環滿足要求，請輸出：
+
+\begin{format}
+\f{
+$K$
+$M$
+}
+\end{format}
+
+\begin{itemize}
+\tightlist
+\item
+  \(K\) 為輸出分子環的不穩定度。
+\item
+  \(M\) 為一長度 \(a+b+c\) 且只包含 \texttt{X,\ Y}
+  字元的字串，表示分子環的結構。
+\end{itemize}
+
+若沒有分子環能滿足博士的要求，那請輸出：
+
+\begin{format}
+\f{
+$-1$
+}
+\end{format}
+
+\subsection{測資限制}
+
+\begin{itemize}
+\tightlist
+\item
+  \(0 \le a, b, c \le 10^5\)。
+\item
+  \(a+b+c \ge 3\)。
+\item
+  以上變數皆為整數。
+\end{itemize}
+
+\subsection{範例測試}
+
+\begin{example}
+\exmp{
+2 1 1
+}{%
+-1
+}%
+\exmp{
+2 1 2
+}{%
+2
+XXYXY
+}%
+\exmp{
+0 0 4
+}{%
+2
+XXYY
+}%
+\exmp{
+4 4 0
+}{%
+1
+XYXYXYXY
+}%
+\exmp{
+5 3 10
+}{%
+3
+XYYYXYYXYXXXYXXYXX
+}%
+\end{example}
+
+\subsection{評分說明}
+
+對每筆有解的輸入檔，評分程式會計算一個 \(K^{*}\)
+值代表滿足博士要求的最小穩定度。
+若你的程式輸出的分子環正確且滿足博士要求，則該筆測試資料得分為：
+
+\[\textbf{round}(\frac{1000}{1 + \min\{19, K - K^{*}\}}) \div 1000\]
+
+乘以該筆子任務配分，其中 \texttt{round(x)} 代表對 \(x\)
+四捨五入取至整數位。
+該子任務的得分為所有輸入檔最小的得分，並請注意若有以下情況則該筆輸入以
+\(0\) 分計：
+
+\begin{itemize}
+\tightlist
+\item
+  不滿足題目要求，包括
+
+  \begin{itemize}
+  \tightlist
+  \item
+    與 \texttt{XX}, \texttt{YY}, \texttt{XY} 相鄰的分子數並非規定的
+    \(a\), \(b\), \(c\) 個
+  \item
+    有解卻輸出 \texttt{-1}
+  \item
+    無解但輸出有解
+  \end{itemize}
+\item
+  輸出的 \(K\) 值並非 \(M\) 的不穩定度。
+\end{itemize}
+
+\subsection{子任務}
+
+本題共有四組子任務，條件限制如下所示。
+每一組可有一或多筆測試資料，取該組所有測試資料中最低分為該子任務得分。
+
+\begin{longtable}[]{@{}ccl@{}}
+\toprule
+子任務 & 分數 & 額外輸入限制 \\
+\midrule
+\endhead
+1 & \(8\) & \(a + b + c \le 15\) \\
+2 & \(29\) & \(a, b, c \le 20\) \\
+3 & \(21\) & \(b=0\) 且 \(2a \ge c\) \\
+4 & \(42\) & 無額外限制 \\
+\bottomrule
+\end{longtable}
+
+\section{公路 (road)}
+
+\subsection{問題描述}
+
+某國的公路網由 \(n\) 個城鎮（編號 \(1\sim n\)）和 \(m\)
+條連接兩個相異城鎮的雙向公路組成， 每條公路有其長度，以公里表示。
+最近該國流行起電動車， 但是公路之間都沒有充電站， 電動車只能在城鎮充電。
+該國交通部門官員十分擔心有些被觀光局規劃好的旅程會使電動車的續航力沒辦法走完一條公路，
+也因此，官員希望旅程中使用到的最長公路長度要盡量短，
+否則若有些電動車的實際續航力低於一段公路的長度，
+它們一定會在公路中間沒電。
+
+對於一趟被規劃好的旅程， 觀光局會為其決定好一個起點 \(u\) 和終點 \(v\)，
+並找出\textbf{兩條}由 \(u\) 到 \(v\) \textbf{公路相互不重複}的路徑，
+來做為一個完整的旅程規劃。 例如下圖是一個 \(n=7\)、\(m=9\) 的例子，
+點上標示城鎮的編號， 邊上標示公路的長度。
+
+\begin{figure}[h]
+\centering
+\scalebox{0.9}{
+\begin{tikzpicture}[auto, node distance=3cm,
+                    thick, main node/.style={circle, draw}]
+    \node[main node] (1)             {$1$};
+    \node[main node] (2) [above of=1]{$2$};
+    \node[main node] (3) [right of=1]{$3$};
+    \node[main node] (5) [right of=2]{$5$};
+    \node[main node] (4) [right of=5]{$4$};
+    \node[main node] (6) [right of=3]{$6$};
+    \node[main node] (7) [right of=4]{$7$};
+
+    \path[every node/.style={}]
+    (1) edge node {$5$} (2)
+        edge node {$3$} (3)
+    (2) edge node {$3$} (5)
+        edge node {$8$} (3)
+    (3) edge node {$3$} (4)
+        edge node {$4$} (5)
+        edge node {$2$} (6)
+    (4) edge node {$7$} (6)
+    (6) edge node {$6$} (7);
+\end{tikzpicture}
+}
+\end{figure}
+
+若要規劃城鎮 \(1\) 到城鎮 \(2\) 的旅程， 可以採用以下兩條路徑：
+
+\begin{itemize}
+\tightlist
+\item
+  \(1\to 2\) 以及 \(1\to 3\to 2\)
+\end{itemize}
+
+這兩條路徑中，所使用的到的最長公路長度是 \(8\) 公里，
+但若採用以下兩條路徑：
+
+\begin{itemize}
+\tightlist
+\item
+  \(1\to 2\) 以及 \(1\to 3\to 5\to 2\)
+\end{itemize}
+
+就可以將使用的最長公路長度降低至 \(5\)， 也是使最長公路最短的選擇方式。
+而若要規劃城鎮 \(1\) 到城鎮 \(6\) 的旅程， 可以採用以下兩條路徑：
+
+\begin{itemize}
+\tightlist
+\item
+  \(1\to 3\to 6\) 以及 \(1\to 2\to 5\to 3\to 4\to 6\)
+\end{itemize}
+
+使用的最長公路長度是 \(7\)， 同時也是使最長公路最短的選擇方式，
+注意到雖然這兩條路徑共用了同一個城鎮 \(3\)，
+但條件只要求「使用的公路不重複」， 因此為一種滿足條件的路徑選擇方式。
+
+一個旅程的兩條路徑所使用的最長公路愈短，則該旅程愈佳。 今給定 \(q\)
+對起終點，請寫程式計算每對起終點之最佳旅程使用到的最長公路長度，
+或者回報不存在任何一種路徑的選擇方式。
+
+\subsection{輸入格式}
+
+\begin{format}
+\f{
+$n$ $m$
+$a_1$ $b_1$ $l_1$
+$a_2$ $b_2$ $l_2$
+$\vdots$
+$a_m$ $b_m$ $l_m$
+$q$
+$u_1$ $v_1$
+$u_2$ $v_2$
+$\vdots$
+$u_q$ $v_q$
+}
+\end{format}
+
+\begin{itemize}
+\tightlist
+\item
+  \(n\), \(m\) 分別代表城鎮和公路的數量。
+\item
+  第 \(i\) 條公路連接著城鎮 \(a_i\) 和 \(b_i\)，且長度為 \(l_i\) 公里。
+\item
+  \(q\) 代表預計規劃的旅程數量。
+\item
+  第 \(i\) 個旅程預計選擇 \(u_i\) 作為起點、\(v_i\) 作為終點。
+\end{itemize}
+
+\subsection{輸出格式}
+
+\begin{format}
+\f{
+$p_1$
+$p_2$
+\vdots
+$p_q$
+}
+\end{format}
+
+\begin{itemize}
+\tightlist
+\item
+  \(p_i\) 為一整數
+
+  \begin{itemize}
+  \tightlist
+  \item
+    若 \(p_i = -1\)，則表示不存在路徑的選擇方法可以完整的規劃第 \(i\)
+    個旅程。
+  \item
+    否則，\(p_i\) 代表在最佳的路徑選擇方式下，第 \(i\)
+    個旅程所使用到的最長公路長度最小值。
+  \end{itemize}
+\end{itemize}
+
+\subsection{測資限制}
+
+\begin{itemize}
+\tightlist
+\item
+  \(2 \le n \le 1000\)。
+\item
+  \(n - 1 \le m \le \displaystyle\frac{n\times (n-1)}{2}\)。
+\item
+  \(1 \le a_i, b_i \le n\)，\(a_i \ne b_i\)。
+\item
+  \(1 \le l_i \le 10^9\)。
+\item
+  不會有兩條公路連接著相同的一組城鎮。
+\item
+  \(1 \le q \le 5\times 10^5\)。
+\item
+  \(1 \le u_i, v_i \le n\)，\(u_i \ne v_i\)。
+\item
+  輸入的數皆為整數。
+\item
+  保證任兩個城鎮可以透過若干條公路直接或間接抵達。
+\end{itemize}
+
+\subsection{範例測試}
+
+\begin{example}
+\exmp{
+7 9
+1 2 5
+1 3 3
+2 3 8
+2 5 3
+3 4 3
+3 5 4
+3 6 2
+4 6 7
+6 7 6
+3
+1 2
+1 6
+3 7
+}{%
+5
+7
+-1
+}%
+\end{example}
+
+\subsection{評分說明}
+
+本題共有四組子任務，條件限制如下所示。
+每一組可有一或多筆測試資料，該組所有測試資料皆需答對才會獲得該組分數。
+
+\begin{longtable}[]{@{}ccl@{}}
+\toprule
+子任務 & 分數 & 額外輸入限制 \\
+\midrule
+\endhead
+1 & \(18\) & \(n \le 100\)，\(m, q \le 300\)，\(l_i = 1\) \\
+2 & \(31\) & \(n \le 500\)，\(m, q \le 1000\) \\
+3 & \(22\) & \(m\le 3000\) \\
+4 & \(29\) & 無額外限制 \\
+\bottomrule
+\end{longtable}

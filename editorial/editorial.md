@@ -7,9 +7,9 @@ layout: default
 ## house
 
 對每間房子，可以花 O(m) 的時間求出與所有捷運站的距離，並記錄最小值。
-接著再所有房子依照記錄好的距離最小值排序，時間為 O(nm + m log m)。
+接著再將所有房子依照記錄好的距離最小值、房租以及房子編號排序，時間為 O(nm + m log m)。
 
-這題的座標範圍很大，在記錄最小值的時候要非常小心別將 INF 的範圍開太小。
+這題的座標範圍很大，在記錄距離最小值的時候要很小心別將 INF 的範圍開太小。
 
 ---
 
@@ -24,17 +24,17 @@ layout: default
 
 **[算法1]:** 將數字全部排序輸出第 k 大，複雜度為 O(n<sup>2</sup> log n)。
 
-**[算法2]:** 將數字丟到一個 priority_queue 裡面並維護目前為止的前 k 大。
+**[算法2]:** 將數字丟到一個 [priority_queue](https://en.cppreference.com/w/cpp/container/priority_queue) 裡面並維護目前為止的前 k 大。
 換句話講，當 priority_queue 的大小比 k 大時就將最小的數字 pop 掉，如此可以在 O(n<sup>2</sup> log k) 的時間維護前 k 大數。
 
 **[算法3]:** 將數字的值建出以後用線性找第 k 大的方法。
-STL library 裡面有提供線性的 `nth_element` 可以使用，自己實作 [Quickselect](https://en.wikipedia.org/wiki/Quickselect) 或
+STL library 裡面有提供線性的 [nth_element](https://en.cppreference.com/w/cpp/algorithm/nth_element) 可以使用，自己實作 [Quickselect](https://en.wikipedia.org/wiki/Quickselect) 或
 [Introselect](https://en.wikipedia.org/wiki/Introselect) 也可以分別達到平均 O(n<sup>2</sup>) 或最差 O(n<sup>2</sup>) 的效率。
 
-**[算法4]:** 將數字的值建出以後線性 `make_heap`，並將最大值 pop k 次即可得到第 k 大。
+**[算法4]:** 將數字的值建出以後線性 [make_heap](https://en.cppreference.com/w/cpp/algorithm/make_heap)，並將最大值 pop k 次即可得到第 k 大。
 這樣做的複雜度是 O(n<sup>2</sup> + k log n)，在 k 很大的時候可以視為是 O(n<sup>2</sup> log n)。
 
-在 n=10000 的時候 O(n<sup>2</sup>) 可以通過所有的測資，但 O(n<sup>2</sup> log n) 並不保證。
+n=10000 的時候 O(n<sup>2</sup>) 保證可以通過所有的測資，但 O(n<sup>2</sup> log n) 則沒有這個保證，只有常數小的解可以通過。
 
 ### O(k log n) 算法
 
@@ -63,19 +63,20 @@ STL library 裡面有提供線性的 `nth_element` 可以使用，自己實作 [
 
 ## game
 
-簡而言之，這題就是將「樹上直徑」這個經典題做了以下的修改：
+簡而言之，這題就是將「[樹上最長路, 樹的直徑](https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_5_A&lang=en)」這個經典題做了以下的修改：
 
 1. 從邊權變為點權
 1. 權重可以為負
-1. 從樹變成水母
+1. 從樹變成水母（點數和邊數一樣的連通圖，恰好只有一個環）
 
-比起正確的作法，比較值得一提的是因為條件的設定這題存在許多錯誤的做法：
+比起正確的作法，值得一提的是因為條件的設定這題存在許多錯誤的做法：
 
-* [2次BFS找最長路](https://stackoverflow.com/questions/20010472/proof-of-correctness-algorithm-for-diameter-of-a-tree-in-graph-theory) 即使只有樹也是錯的，因為有負權重
-* [floyd warshall](https://www.quora.com/How-does-the-Floyd-Warshall-algorithm-work-for-a-negative-edges-graph) 也是錯的，因為有正環。同理，bellman-ford 也會因為正環出錯
-* [dijkstra](https://stackoverflow.com/questions/13159337/why-doesnt-dijkstras-algorithm-work-for-negative-weight-edges) 也會錯，因為有負權
+* [2次BFS找最長路](https://stackoverflow.com/questions/20010472/proof-of-correctness-algorithm-for-diameter-of-a-tree-in-graph-theory) 在只有樹的測資也是錯的，因為有負權重
+* [floyd warshall](https://www.quora.com/How-does-the-Floyd-Warshall-algorithm-work-for-a-negative-edges-graph) 是錯的，因為存在正環。同理，bellman-ford 也會因為正環出錯
+* [dijkstra](https://stackoverflow.com/questions/13159337/why-doesnt-dijkstras-algorithm-work-for-negative-weight-edges) 也會錯，因為有正權（diskstra不能做負權最短路，或正權最長路）
 
-筆者這裡建議大家學演算法的時候要多留意證明的過程，以避免陷入用錯誤演算法的迴圈而無法跳脫的情況。
+這些演算法的限制十分容易混淆，而且比賽中一旦陷入錯誤的做法通常會很難跳脫。
+筆者這裡建議大家學演算法的時候要多留意證明的過程，以避免陷入用錯誤演算法而無法跳脫的死胡同。
 
 ----
 
@@ -101,10 +102,10 @@ STL library 裡面有提供線性的 `nth_element` 可以使用，自己實作 [
 
 ### 水母最長路
 
-把環上的每個點看成是很多棵樹的 root 串聯起來，可以發現最長路只有兩種情況:
+把環上的每個點看成是很多棵樹的 root 串聯起來，依照最長路經過的非樹根節點可以分類成兩種情況:
 
-1. 某棵樹上的最長路
-2. 某棵樹上的一條由下往上的路徑 + 環上某些邊 + 另一棵樹由上往下的路徑
+1. 是某棵樹上的最長路
+2. 是某棵樹上的一條由下往上的路徑 + 環上某些邊 + 另一棵樹由上往下的路徑
 
 (1) 的部分可以對每棵樹做一次 DP 在線性求出來，
 (2) 的部分可以算出每棵樹 `down` 值後在環上再做一次 DP，DP 的值可以用前綴和 + deque 或 set 維護。
@@ -201,26 +202,32 @@ $2b$ 個 `Y` 字元，以及 $c$ 個 `X` 與 `Y` 字元。
 由鴿籠原理，至少有一個區間的 `X` 個數大於等於 $\lceil \frac{C_X}{C_Y} \rceil$。
 
 由以上兩點，我們可以證明此構造法構造出的字串為最小可能的不穩定度。
+這個引理得出的構造法為 $2a \ge c, b=0$ 子任務的預設做法。
 
 
-#### [引理4]: 必定存在一組最小的答案，使得連續 X 長度都小於 3，或者連續 Y 長度都小於 3
+#### [引理4]: 當答案有兩種字元時，必定存在一組最小的答案，使得連續 X 長度都小於 3，或者連續 Y 長度都小於 3
 
-扣除掉答案只有一種字元的情況，我們可以把連續相同字母壓縮起來，並將答案表示成:
+可以把連續相同字母壓縮起來，由對稱性我們可以以以下表示法表示任意答案字串：
 
 $X^{a_1}Y^{b_1}X^{a_2}Y^{b_2} \cdots X^{a_t}Y^{b_t}$
 
-的形式，在這裡可以觀察到幾個性質:
+在這裡可以觀察到幾個性質:
 
-1. ${a}$ 與 ${b}$ 的順序並不重要，例如 $X^3Y^2X^4Y^1$ 與 $X^4Y^2X^3Y^1$ 的 (a, b, c) 與不穩定度皆相同
+1. {a} 與 {b} 的順序並不重要，例如 $X^3Y^2X^4Y^1$ 與 $X^4Y^2X^3Y^1$ 的 (a, b, c) 與不穩定度皆相同
 2. 若有 $a_i \ge 3$ 且 $b_j \ge 3$，我們可以將 $a_i, b_j$ 所屬的 `X`, `Y` 拿一個出來放在最後，(a, b, c) 不變且不穩定度有可能變小
-  - 也就是變成 $X^{a_1}Y^{b_1}X^{a_2}Y^{b_2} \cdots X^{a_i-1} \cdots Y^{b_j-1} \cdots x^{a_t}Y^{b_t}X^1Y^1$
+  - 例如 $i \le j$，新字串會變成 $X^{a_1}Y^{b_1}X^{a_2}Y^{b_2} \cdots X^{a_i-1} \cdots Y^{b_j-1} \cdots x^{a_t}Y^{b_t}X^1Y^1$
 
-思考上面兩性質對應到的 (a, b, c) 時，可以加入引理2的結論來思考會簡化許多 ー 例如 `(Y, Y)` 的 pair 數量可以用 $\sum \max\{0, b_i-2\}$ + 「$a_i=1$ 的數量」來計算。
+思考上面兩性質對應到的 (a, b, c) 時，可以加入引理2的結論來思考會簡化許多 ー 例如只考慮構造出來字串中 `(Y, Y)` 的 pair 數量，b 可以用 $\sum \max(0, b_i - 2)$ + 「$a_i=1$ 的數量」來計算。
 
-由上面的結論可以發現，{a} 與 {b} 集合必定有一個集合只有 1, 2 兩種數字而已。
-由於 $C_X \ge C_Y$，可以直接枚舉 {b} 集合中 $Y^2$ 的數量 $P_{yy}$ 與 $Y^1$ 的數量 $P_y$，
-又由引理一可知 $2P_{yy} + P_y = b + \frac{c}{2}$，可以在 O(b+c) 的時間內枚舉，並且由引理2又可以得知恰好只有 $b$ 個 $a_i=1$。
-剩下的 `X` 就如引理 3 的做法盡量平分並判斷解的可行性即可。
+由上面的結論可以發現，{a} 與 {b} 必定有一個集合只有 1, 2 兩種數字而已，
+由於 $C_X \ge C_Y$，可以假設只有 1, 2 數字的集合是 {b}。
+試著枚舉 {b} 集合中 $b_i = 2$ 的數量 $P_{yy}$ 與 $b_i = 1$ 的數量 $P_y$；
+可以推出關係式 $2P_{yy} + P_y = b + \frac{c}{2}$（引理1），
+這代表我們可以在 O(b+c) 的時間內枚舉所有 $P_{yy}$ 與 $P_y$ 的組合。
+
+枚舉完 $P_{yy}$ 與 $P_y$ 之後，接著需要構造恰好 $b$ 個 $a_i=1$，
+以及其他必須都要大於等於 2 的 $a_i$，剩下的 $a_i$ 只要都大於等於 2 必定是合法的解（引理3, 引理2），
+只需要盡量讓最大值越小越好盡量最小化字串不穩定度就可以了。
 
 #### 構造方法
 
@@ -233,7 +240,7 @@ $X^{a_1}Y^{b_1}X^{a_2}Y^{b_2} \cdots X^{a_t}Y^{b_t}$
 
 ----
 
-可以拿到滿分的構造解法與上面引理4的出發點非常類似，但需要考慮更多的 edge cases。
+如果要得到滿分的話還得需要考慮更多構造法沒辦法處理的 edge cases，
 在這裡我們就列出一些特殊解的做法以供參考。
 
 #### 特殊解
@@ -242,7 +249,7 @@ $X^{a_1}Y^{b_1}X^{a_2}Y^{b_2} \cdots X^{a_t}Y^{b_t}$
 
 * $c$ 是奇數
 * $c=2$ 且 $a=b$
-* $c=0$, $a \neq b$ 且 $\min\{a, b\} > 0$
+* $c=0$, $a \neq b$ 且 $\min (a, b) > 0$
 * $a=b=0$，且 $c \equiv 2 \pmod 4$
 
 **特殊解的 case:**
@@ -257,6 +264,7 @@ $X^{a_1}Y^{b_1}X^{a_2}Y^{b_2} \cdots X^{a_t}Y^{b_t}$
 
 #### [性質 1] 對於給定的詢問 $u, v$，找出詢問所求最長公路的長度最小值等價找到最小的值 $w$，使得：
 - 僅考慮所有 $\le w$ 長度的公路時，不存在[橋](https://zh.wikipedia.org/zh-tw/%E6%A1%A5_(%E5%9B%BE%E8%AE%BA))被移除後使得 $u, v$ 從連通變得不連通。
+
 #### [性質 2] 如果把一張圖上所有的[橋](https://zh.wikipedia.org/zh-tw/%E6%A1%A5_(%E5%9B%BE%E8%AE%BA))都找出來，那麼這些橋可以將點分成「互相不會因為橋被移除而不連通」的若干群點集。
 - 每一群點集又被稱為「邊雙連通分量」（[2-edge-connected component](https://en.wikipedia.org/wiki/K-edge-connected_graph)，又稱 Bridge-connected component，以下簡稱 BCC）。
 
